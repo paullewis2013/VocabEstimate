@@ -30,19 +30,38 @@
 
         <h1>Hello!</h1>
 
-        <label for="language-select">Choose a target language:</label>
-        <select id="language-select" name="language" onchange="changeGreeting()">
-            <option value="english">English</option>
-            <option value="spanish">Spanish</option>
-            <option value="french">French</option>
-        </select>
+        <p>Let's estimate your vocabulary in a target language.</p>
 
-        <div>
-            <div>
-                <p>Select words here tbd</p>
+        <div class="container">
+
+            <div id="selectLanguage">
+                <label for="language-select">Choose a target language:</label>
+                <select id="language-select" name="language" onchange="changeLanguage()">
+                    <option value="english">English</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="french">French</option>
+                </select>
+            </div>
+            
+            <div id="wordCount">
+
+                <p>Words</p>
+
+                <label>
+                    <input type="radio" name="wordCount" value="50" checked>
+                    50
+                </label>
+                <label>
+                    <input type="radio" name="wordCount" value="100">
+                    100
+                </label>
+                <label>
+                    <input type="radio" name="wordCount" value="200">
+                    200
+                </label>                  
             </div>
 
-            <button class="btn btn-primary btn-lg" onclick="location.href='html/words.html';">Begin</button>
+            <button class="btn begin-button" onclick="beginButton()">Begin</button>
 
         </div>
 

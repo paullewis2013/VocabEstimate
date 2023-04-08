@@ -2,9 +2,88 @@ body, html{
     height: 100%;
     margin: 0;
     padding: 10px;
+    background: linear-gradient(to bottom, #00b4db, #0083b0);
 }
 h1{
+    font-size: 15em;
+    font-weight: bold;
+    text-align: center;
+}
+p{
     font-size: 2em;
     font-weight: bold;
     text-align: center;
 }
+#wordCount{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 40px;
+    flex-grow: 1;
+    align-items: center;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.begin-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 20px 80px;
+    cursor: pointer;
+    font-size: 36px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+.begin-button:hover {
+    background-color: #0062cc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+#selectLanguage {
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.language-select {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  select {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: sans-serif;
+    background-color: #f8f8f8;
+    transition: all 0.3s ease;
+  }
+  
+  select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+  
+  option {
+    font-size: 16px;
+    font-family: sans-serif;
+  }
+  

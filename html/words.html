@@ -14,32 +14,36 @@
         <meta property="og:title" content="Paul Lewis Portfolio" >
         <meta property="og:type" content="website" >
         <meta property="og:url" content="https://paullewis2013.github.io/VocabEstimate/" >
-        <meta property="og:image" content="imgs/paul_circle.png" >
+        <meta property="og:image" content="../imgs/paul_circle.png" >
 
         <!-- CSS and Bootstrap -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="../css/words.css">
 
         <!-- Sets icon displayed in tab for website -->
-        <link rel="shortcut icon" href="imgs/favicon.png" type="image/x-icon">
-        <link rel="icon" href="imgs/favicon.png" type="image/x-icon">
+        <link rel="shortcut icon" href="../imgs/favicon.png" type="image/x-icon">
+        <link rel="icon" href="../imgs/favicon.png" type="image/x-icon">
 
     </head>
 
     <body>
 
-        <p>1/100</p>
+        <p id="wordNum">1/100</p>
 
-        <h1>Tree</h1>
+        <h1 id="targetWord">Tree</h1>
 
         <div class="row">
             <div class="col-sm-6 text-center">
-                <button class="btn btn-danger">I do not know</button>
+                <button class="fail-button" onclick="wordButton(false)">I do not know</button>
             </div>
             <div class="col-sm-6 text-center">
-                <button class="btn btn-success" onclick="location.href='results.html';">I do know</button>
+                <button class="success-button" onclick="wordButton(true)">I do know</button>
             </div>
         </div>
+
+        <button class="continueButton" onclick="location.href='results.html';" disabled id="continueButton">Continue</button>
+
+        <script src="../scripts/words.js"></script>
 
     </body>
 </html>

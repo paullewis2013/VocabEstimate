@@ -1,4 +1,15 @@
 
+function beginButton(){
+
+    var wordCount = getSelectedWordCount()
+    var language = getSelectedLanguage()
+
+    console.log("wordCount: " + wordCount + ", language: " + language)
+
+    //TODO pass language and word count to next page
+    location.href = "html/words.html";
+}
+
 // called whenever dropdown changes
 function changeGreeting() {
 
@@ -16,4 +27,27 @@ function changeGreeting() {
         heading.innerText = 'Bonjour!';
     }
 }
+
+function changeLanguage(){
+
+    changeGreeting()
+
+    //TODO load correct word set
+
+}
   
+function getSelectedWordCount(){
+
+    //get the value of the radio button
+    var radio = document.querySelector('input[name="wordCount"]:checked');
+
+    return radio.value
+}
+
+function getSelectedLanguage(){
+
+    //get the value of the selected option
+    var dropdown = document.querySelector('select');
+    var selectedOption = dropdown.options[dropdown.selectedIndex];
+    return selectedOption.text;
+}
