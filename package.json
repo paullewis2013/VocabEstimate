@@ -1,0 +1,22 @@
+{
+  "name": "vocabestimate",
+  "version": "1.0.0",
+  "description": "A simple tool to estimate total vocabulary in a target language",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paullewis2013/VocabEstimate.git"
+  },
+  "author": "Paul Lewis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paullewis2013/VocabEstimate/issues"
+  },
+  "homepage": "https://github.com/paullewis2013/VocabEstimate#readme",
+  "devDependencies": {
+    "electron": "^24.0.0"
+  }
+}
