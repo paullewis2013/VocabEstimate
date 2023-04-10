@@ -32,20 +32,22 @@ function wordButton(isKnown){
         //TODO add to unknown words
     }
 
-    // TODO off by one error
-    if(wordNum <= maxWords){
+    if(wordNum == maxWords){
+        document.getElementById("success-button").disabled = true;
+        document.getElementById("fail-button").disabled = true;
+        document.getElementById("continueButton").disabled = false;
+    }
+
+    if(wordNum < maxWords){
         
         //TODO decide bracket range of next word
 
         //TODO load next word
+
+
         document.getElementById("targetWord").innerHTML = generateRandomString(5);
 
         incrementWordNum();
-        
-    }else{
-        document.getElementById("success-button").disabled = true;
-        document.getElementById("fail-button").disabled = true;
-        document.getElementById("continueButton").disabled = false;
     }
 }
 
