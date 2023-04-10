@@ -34,15 +34,23 @@
 
         <div class="row">
             <div class="col-sm-6 text-center">
-                <button class="fail-button" onclick="wordButton(false)">I do not know</button>
+                <button class="fail-button" onclick="wordButton(false)" id="fail-button">
+                    <p>I do not know</p>
+                    <img src="../imgs/left.svg" alt="Left arrow icon">
+                </button>
             </div>
             <div class="col-sm-6 text-center">
-                <button class="success-button" onclick="wordButton(true)">I do know</button>
+                <button class="success-button" onclick="wordButton(true)" id="success-button">
+                    <p>I do not know</p>
+                    <img src="../imgs/left.svg" alt="Right arrow icon" id="right-arrow">
+                </button>
             </div>
         </div>
 
-        <button class="continueButton" onclick="location.href='results.html';" disabled id="continueButton">Continue</button>
-
+        <div id="continueButtonDiv">
+            <button class="continueButton" onclick="location.href='results.html';" disabled id="continueButton">Continue</button>
+        </div>
+    
         <script src="../scripts/words.js"></script>
 
     </body>

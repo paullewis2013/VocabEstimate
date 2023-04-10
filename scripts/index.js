@@ -4,9 +4,12 @@ function beginButton(){
     var wordCount = getSelectedWordCount()
     var language = getSelectedLanguage()
 
-    console.log("wordCount: " + wordCount + ", language: " + language)
+    // console.log("wordCount: " + wordCount + ", language: " + language)
 
-    //TODO pass language and word count to next page
+    //save to local storage to access in other pages
+    localStorage.setItem('wordCount', wordCount)
+    localStorage.setItem('language', language)
+
     location.href = "html/words.html";
 }
 
