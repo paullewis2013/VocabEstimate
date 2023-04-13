@@ -76,7 +76,7 @@ p{
 }
 #continueButtonDiv {
     display: flex;
-    justify-content: right;
+    justify-content: center;
 }
 button:disabled {
     display: none;

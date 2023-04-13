@@ -4,8 +4,6 @@ function beginButton(){
     var wordCount = getSelectedWordCount()
     var language = getSelectedLanguage()
 
-    // console.log("wordCount: " + wordCount + ", language: " + language)
-
     //save to local storage to access in other pages
     localStorage.setItem('wordCount', wordCount)
     localStorage.setItem('language', language)
@@ -36,7 +34,7 @@ function changeLanguage(){
     changeGreeting()
 
     //TODO load correct word set
-
+    
 }
   
 function getSelectedWordCount(){
