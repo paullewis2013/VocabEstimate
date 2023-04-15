@@ -6,6 +6,8 @@ const fs = require('fs')
 const path = require('path')
 const { ipcMain } = require('electron')
 
+var languageData = []
+
 // Listen for messages from the renderer process
 ipcMain.on('set-language', (event, message) => {
     console.log("language set to " + message) 
@@ -19,8 +21,21 @@ ipcMain.on('set-language', (event, message) => {
         }
         
         // Do something with the file data here
-        console.log(data.split('\n')[100])
+        languageData = data.split('\n')
     })
+})
+// Listen for messages from the renderer process
+ipcMain.handle('get-word', (event, message) => {
+
+    // Get a random word from the language data
+    var word = languageData[message]
+    // console.log(word)
+
+    word = word.split('\t')[1]
+    // console.log(word)
+
+    // Send the word back to the renderer process
+    return word
 })
 
 const createWindow = () => {

@@ -1,11 +1,16 @@
+const { ipcRenderer } = require('electron')
+
 var wordNum = 1;
 var maxWords = localStorage.getItem('wordCount')
 var language = localStorage.getItem('language')
 
-function init(){
+async function init(){
     document.getElementById("wordNum").innerHTML = wordNum + "/" + maxWords;
 
-    document.getElementById("targetWord").innerHTML = generateRandomString(5);
+    var index = Math.floor(Math.random() * (1000) + 100);
+
+    const word = await ipcRenderer.invoke('get-word', index)
+    document.getElementById("targetWord").innerHTML = word;
 }
 init()
 
@@ -24,7 +29,7 @@ document.addEventListener("keydown", function(event) {
     }
 });
 
-function wordButton(isKnown){
+async function wordButton(isKnown){
 
     if(isKnown){
         //TODO add to known words
@@ -41,12 +46,12 @@ function wordButton(isKnown){
     if(wordNum < maxWords){
         
         //TODO decide bracket range of next word
+        var index = Math.floor(Math.random() * (1000) + 100);
 
-        //TODO load next word
-
-
-        document.getElementById("targetWord").innerHTML = generateRandomString(5);
-
+        //load next word
+        const word = await ipcRenderer.invoke('get-word', index)
+ 
+        document.getElementById("targetWord").innerHTML = word;
         incrementWordNum();
     }
 }
