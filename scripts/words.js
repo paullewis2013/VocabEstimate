@@ -63,13 +63,3 @@ function incrementWordNum(){
     wordNum++;
     document.getElementById("wordNum").innerHTML = wordNum + "/" + maxWords;
 }
-
-function generateRandomString() {
-    let randomString = "";
-    const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    for (let i = 0; i < 6; i++) {
-        const randomIndex = Math.floor(Math.random() * alphabet.length);
-        randomString += alphabet[randomIndex];
-    }
-    return randomString;
-}
