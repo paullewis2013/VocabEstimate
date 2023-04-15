@@ -1,3 +1,7 @@
+const { ipcRenderer } = require('electron')
+
+// set language to English initially
+ipcRenderer.send('set-language', getSelectedLanguage())
 
 function beginButton(){
 
@@ -33,8 +37,8 @@ function changeLanguage(){
 
     changeGreeting()
 
-    //TODO load correct word set
-    
+    //load correct word set
+    ipcRenderer.send('set-language', getSelectedLanguage())
 }
   
 function getSelectedWordCount(){
