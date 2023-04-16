@@ -28,13 +28,21 @@ ipcMain.on('set-language', (event, message) => {
 })
 
 ipcMain.on('known-word', (event, message) => {
-    console.log("known word: " + message)
-    knownWords.push(message)
+    // console.log("known word: " + message)
+    if(!knownWords.includes(message) && !unknownWords.includes(message)){
+        knownWords.push(message)
+    }else{
+        console.log('duplicate word: ' + message)
+    }
 })
 
 ipcMain.on('unknown-word', (event, message) => {
-    console.log("unknown word: " + message)
-    unknownWords.push(message)
+    // console.log("unknown word: " + message)
+    if(!knownWords.includes(message) && !unknownWords.includes(message)){
+        unknownWords.push(message)
+    }else{
+        console.log('duplicate word: ' + message)
+    }
 })
 
 ipcMain.on('reset', (event, message) => {
@@ -44,12 +52,16 @@ ipcMain.on('reset', (event, message) => {
 // Listen for messages from the renderer process
 ipcMain.handle('get-word', (event, message) => {
 
-    // Get a random word from the language data
-    var word = languageData[message]
-    // console.log(word)
+    var word
+    var index
+        
+    do{
+        index = Math.floor(Math.random() * (1000) + 100);
+        word = languageData[index]
 
-    word = word.split('\t')[1]
-    // console.log(word)
+        word = word.split('\t')[1]
+
+    }while(knownWords.includes(word) || unknownWords.includes(word))
 
     // Send the word back to the renderer process
     return word

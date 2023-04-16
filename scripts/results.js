@@ -9,5 +9,5 @@ init()
 
 function restartButton(){
     ipcRenderer.send('reset', '')
-    window.location.href = "index.html"
+    window.location.href = "../index.html"
 }
