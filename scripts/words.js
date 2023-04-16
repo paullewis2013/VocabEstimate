@@ -31,10 +31,14 @@ document.addEventListener("keydown", function(event) {
 
 async function wordButton(isKnown){
 
+    var prevWord = document.getElementById("targetWord").innerHTML
+
     if(isKnown){
         //TODO add to known words
+        ipcRenderer.send('known-word', prevWord)
     }else{
         //TODO add to unknown words
+        ipcRenderer.send('unknown-word', prevWord)
     }
 
     if(wordNum == maxWords){

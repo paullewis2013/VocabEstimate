@@ -7,6 +7,8 @@ const path = require('path')
 const { ipcMain } = require('electron')
 
 var languageData = []
+var knownWords = []
+var unknownWords = []
 
 // Listen for messages from the renderer process
 ipcMain.on('set-language', (event, message) => {
@@ -24,6 +26,21 @@ ipcMain.on('set-language', (event, message) => {
         languageData = data.split('\n')
     })
 })
+
+ipcMain.on('known-word', (event, message) => {
+    console.log("known word: " + message)
+    knownWords.push(message)
+})
+
+ipcMain.on('unknown-word', (event, message) => {
+    console.log("unknown word: " + message)
+    unknownWords.push(message)
+})
+
+ipcMain.on('reset', (event, message) => {
+    knownWords = []
+    unknownWords = []
+})
 // Listen for messages from the renderer process
 ipcMain.handle('get-word', (event, message) => {
 
@@ -36,6 +53,9 @@ ipcMain.handle('get-word', (event, message) => {
 
     // Send the word back to the renderer process
     return word
+})
+ipcMain.handle('get-result', (event, message) => {
+    return "Result: " + knownWords.length + "/" + (unknownWords.length + knownWords.length)
 })
 
 const createWindow = () => {
