@@ -29,10 +29,9 @@ ipcMain.on('set-language', (event, message) => {
 
         for(var i = 0; i < languageData.length; i++){
             if(languageData[i].split('\t')[0].length < 3){
-                console.log("removing " + languageData[i])
                 startIndex++;
             }else{
-                //end the loop early if real words found
+                //end the loop early when we stop seeing symbols
                 break;
             }
         }
@@ -82,7 +81,14 @@ ipcMain.handle('get-word', (event, message) => {
     return word
 })
 ipcMain.handle('get-result', (event, message) => {
-    return "Result: " + knownWords.length + "/" + (unknownWords.length + knownWords.length)
+
+    var result = {
+        knownWords: knownWords.length,
+        unknownWords: unknownWords.length,
+        totalWords: knownWords.length + unknownWords.length
+    }
+
+    return result
 })
 
 const createWindow = () => {

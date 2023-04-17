@@ -1,6 +1,8 @@
 # VocabEstimate
 A tool that will use statistics to estimate total vocabulary known in a target language from success rate with a small sample size
 
+Original data from https://wortschatz.uni-leipzig.de/en/download/
+
 todo
 []remove numeral based words
 []fix indexing to skip only initial symbols

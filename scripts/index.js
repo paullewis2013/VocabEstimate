@@ -30,6 +30,8 @@ function changeGreeting() {
         heading.innerText = '¡Hola!';
     } else if (selectedText === 'French') {
         heading.innerText = 'Bonjour!';
+    } else if (selectedText === 'Portuguese') {
+        heading.innerText = 'Olá!';
     }
 }
 
