@@ -41,8 +41,14 @@
                 $$
                 <li>most common missed word: </li>
                 <li>least common correct word: </li>
-                <li>show intervals for different z values</li>
                 <li>CEFR level:</li>
+                <p>TODO plot</p>
+                <label for="confidence-interval">Select confidence interval:</label>
+                <select id="confidence-interval" name="confidence-interval" onchange="changeConfidence()">
+                    <option value="90">90%</option>
+                    <option value="95" selected>95%</option>
+                    <option value="99">99%</option>
+                </select>
             </ul>
         </div>
           

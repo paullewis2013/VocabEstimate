@@ -82,11 +82,34 @@ ipcMain.handle('get-word', (event, message) => {
 })
 ipcMain.handle('get-result', (event, message) => {
 
+    const z_90 = 1.645;
+    const z_95 = 1.96;
+    const z_99 = 2.58;
+
     var result = {
         knownWords: knownWords.length,
         unknownWords: unknownWords.length,
-        totalWords: knownWords.length + unknownWords.length
+        sampleMean: 0,
+        sampleStandardDeviation: 0,
+        sampleSize: knownWords.length + unknownWords.length,
+        variance: 0,
+        vocabEstimate: 0,
+        confidence90: 0,
+        confidence95: 0,
+        confidence99: 0
     }
+
+    result.vocabEstimate = Math.floor(1000 * (knownWords.length / (knownWords.length + unknownWords.length)))
+    result.sampleMean = result.knownWords / result.sampleSize
+    
+    sumSquaredDeviations = knownWords.length * Math.pow((1 - result.sampleMean), 2) + unknownWords.length * Math.pow((0 - result.sampleMean), 2)
+    
+    result.variance = sumSquaredDeviations / (result.sampleSize - 1)
+    result.sampleStandardDeviation = Math.sqrt(result.variance)
+
+    result.confidence90 = z_90 * result.sampleStandardDeviation / Math.sqrt(result.sampleSize)
+    result.confidence95 = z_95 * result.sampleStandardDeviation / Math.sqrt(result.sampleSize)
+    result.confidence99 = z_99 * result.sampleStandardDeviation / Math.sqrt(result.sampleSize)
 
     return result
 })

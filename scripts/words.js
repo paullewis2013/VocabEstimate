@@ -19,25 +19,21 @@ var finished = false
 
 //use left and right arrow keys instead of buttons
 document.addEventListener("keydown", async function(event) {
-    
-    console.log('blockArrowKeys' + blockArrowKeys)
 
     if(!blockArrowKeys & !finished){
         blockArrowKeys = true
         if (event.keyCode === 37) {
             // code to execute when left arrow key is pressed
-            console.log("Left arrow key pressed");
+            // console.log("Left arrow key pressed");
             await wordButton(false)
         }
 
         if (event.keyCode === 39) {
-            // code to execute when left arrow key is pressed
-            console.log("right arrow key pressed");
+            // code to execute when right arrow key is pressed
+            // console.log("right arrow key pressed");
             await wordButton(true)
         }
         blockArrowKeys = false
-    }else{
-        console.log("blocked")
     }
 });
 
