@@ -24,6 +24,20 @@ ipcMain.on('set-language', (event, message) => {
         
         // Do something with the file data here
         languageData = data.split('\n')
+
+        var startIndex = 0
+
+        for(var i = 0; i < languageData.length; i++){
+            if(languageData[i].split('\t')[0].length < 3){
+                console.log("removing " + languageData[i])
+                startIndex++;
+            }else{
+                //end the loop early if real words found
+                break;
+            }
+        }
+
+        languageData = languageData.slice(startIndex, languageData.length)
     })
 })
 
@@ -55,8 +69,9 @@ ipcMain.handle('get-word', (event, message) => {
     var word
     var index
         
+    //get a random word, if it is already in the known or unknown words list, try again
     do{
-        index = Math.floor(Math.random() * (1000) + 100);
+        index = Math.floor(Math.random() * 1000)
         word = languageData[index]
 
         word = word.split('\t')[1]

@@ -7,3 +7,4 @@ todo
 []remove words starting with an uppercase letter? (may vary by language)
 []calculate estimate based on performance in each bracket and display on last page
 []put some LaTeX in frontend 
+[]show which cefr level you would end up in based on estimate
