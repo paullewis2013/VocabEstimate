@@ -22,7 +22,6 @@ ipcMain.on('set-language', (event, message) => {
             return
         }
         
-        // Do something with the file data here
         languageData = data.split('\n')
 
         var startIndex = 0
@@ -37,6 +36,39 @@ ipcMain.on('set-language', (event, message) => {
         }
 
         languageData = languageData.slice(startIndex, languageData.length)
+
+        //clean the data
+        var removeNumerals = true
+        var removeCapitalFirstLetters = true // hopefully this will remove names
+
+        cleanedData = []
+
+        for(var i = 0; i < languageData.length; i++){
+            var words = languageData[i].split('\t')
+            var word
+            if(words.length > 1){
+                word = words[1]
+            }else{
+                continue;
+            }   
+            if(removeNumerals){
+                if(/\d/.test(word)){
+                    // console.log("ignoring " + word + " because it contains a numeral")
+                    continue;
+                }
+            }
+
+            if(removeCapitalFirstLetters){
+                if(word[0] == word[0]?.toUpperCase()){
+                    // console.log("ignoring " + word + " because it starts with a capital letter")
+                    continue;
+                }
+            }
+
+            cleanedData.push(languageData[i])
+        }
+
+        languageData = cleanedData
     })
 })
 
