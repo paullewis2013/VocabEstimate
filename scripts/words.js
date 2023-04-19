@@ -3,14 +3,15 @@ const { ipcRenderer } = require('electron')
 var wordNum = 1;
 var maxWords = localStorage.getItem('wordCount')
 var language = localStorage.getItem('language')
+var words
 
 async function init(){
     document.getElementById("wordNum").innerHTML = wordNum + "/" + maxWords;
 
     var index = Math.floor(Math.random() * (1000) + 100);
 
-    const word = await ipcRenderer.invoke('get-word', index)
-    document.getElementById("targetWord").innerHTML = word;
+    words = await ipcRenderer.invoke('get-words', '')
+    document.getElementById("targetWord").innerHTML = words[wordNum - 1];
 }
 init()
 
@@ -59,7 +60,7 @@ async function wordButton(isKnown){
     if(wordNum < maxWords){
 
         //load next word
-        const word = await ipcRenderer.invoke('get-word', '')
+        var word = words[wordNum]
  
         document.getElementById("targetWord").innerHTML = word;
         incrementWordNum();

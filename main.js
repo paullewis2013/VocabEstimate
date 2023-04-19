@@ -9,6 +9,7 @@ const { ipcMain } = require('electron')
 var languageData = []
 var knownWords = []
 var unknownWords = []
+var sampleSize = 50
 
 // Listen for messages from the renderer process
 ipcMain.on('set-language', (event, message) => {
@@ -40,6 +41,7 @@ ipcMain.on('set-language', (event, message) => {
         //clean the data
         var removeNumerals = true
         var removeCapitalFirstLetters = true // hopefully this will remove names
+        var removeSpaces = true
 
         cleanedData = []
 
@@ -65,13 +67,23 @@ ipcMain.on('set-language', (event, message) => {
                 }
             }
 
+            if(removeSpaces){
+                if(word.includes(' ')){
+                    // console.log("ignoring " + word + " because it contains a space")
+                    continue;
+                }
+            }
+
             cleanedData.push(languageData[i])
         }
-
+        // console.log(cleanedData.length)
         languageData = cleanedData
     })
 })
-
+ipcMain.on('set-sample-size', (event, message) => {
+    sampleSize = message
+    // console.log(sampleSize)
+})
 ipcMain.on('known-word', (event, message) => {
     // console.log("known word: " + message)
     if(!knownWords.includes(message) && !unknownWords.includes(message)){
@@ -80,7 +92,6 @@ ipcMain.on('known-word', (event, message) => {
         console.log('duplicate word: ' + message)
     }
 })
-
 ipcMain.on('unknown-word', (event, message) => {
     // console.log("unknown word: " + message)
     if(!knownWords.includes(message) && !unknownWords.includes(message)){
@@ -89,28 +100,45 @@ ipcMain.on('unknown-word', (event, message) => {
         console.log('duplicate word: ' + message)
     }
 })
-
 ipcMain.on('reset', (event, message) => {
     knownWords = []
     unknownWords = []
 })
-// Listen for messages from the renderer process
-ipcMain.handle('get-word', (event, message) => {
+ipcMain.handle('get-words', (event, message) => {
 
+    var words = []
     var word
+
+    var brackets = 5
+    var bracketStart = 0
+    var bracketSize = 500
+
     var index
-        
-    //get a random word, if it is already in the known or unknown words list, try again
-    do{
-        index = Math.floor(Math.random() * 1000)
-        word = languageData[index]
+    
+    for(let i = 0; i < sampleSize; i++){
 
-        word = word.split('\t')[1]
+        //get a random word, if it is already in words list, try again
+        do{
+            var index = Math.floor((Math.random() * bracketSize) + bracketStart)
+            // console.log(index)
+            word = languageData[index]
 
-    }while(knownWords.includes(word) || unknownWords.includes(word))
+            word = word.split('\t')[1]
+
+        }while(words.includes(word))
+
+        words.push(word)
+
+        if (Math.floor(i % (sampleSize/brackets)) == Math.floor(sampleSize / brackets) - 1) {
+            bracketStart += bracketSize
+            bracketSize *= 2.5
+        }
+    }
+
+    // console.log(words)
 
     // Send the word back to the renderer process
-    return word
+    return words
 })
 ipcMain.handle('get-result', (event, message) => {
 

@@ -12,6 +12,7 @@ function beginButton(){
     localStorage.setItem('wordCount', wordCount)
     localStorage.setItem('language', language)
 
+    ipcRenderer.send('set-sample-size', wordCount)
     location.href = "html/words.html";
 }
 
