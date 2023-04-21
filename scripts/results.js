@@ -6,9 +6,9 @@ async function init(){
     result = await ipcRenderer.invoke('get-result', '')
     console.log(result)
 
-    document.getElementById("result").innerText = result.knownWords + "/" + result.sampleSize;
+    document.getElementById("result").innerText = result.sumKnown + "/" + result.sampleSize;
     document.getElementById("estimate").innerText = "Estimate of " + result.vocabEstimate + 
-        " words known ± " +  (result.vocabEstimate * result.confidence95).toFixed(2) + " with " + confidence + "% confidence";
+        " words known ± " +  (result.sum95).toFixed(2) + " with " + confidence + "% confidence";
 
     updateChart()
 }
@@ -25,22 +25,22 @@ function changeConfidence(){
     var confidence = document.getElementById("confidence-interval").value
     console.log(confidence)
 
-    var confidencePercent;
+    var confidenceSum;
 
     switch(confidence){
         case "90":
-            confidencePercent = result.confidence90
+            confidenceSum = result.sum90
             break;
         case "95":
-            confidencePercent = result.confidence95
+            confidenceSum = result.sum95
             break;
         case "99":
-            confidencePercent = result.confidence99
+            confidenceSum = result.sum99
             break;
     }
 
     document.getElementById("estimate").innerText = "Estimate of " + result.vocabEstimate + 
-        " words known ± " +  (result.vocabEstimate * confidencePercent).toFixed(2) + " with " + confidence + "% confidence";
+        " words known ± " +  (confidenceSum).toFixed(2) + " with " + confidence + "% confidence";
 }
 
 var confidenceInterval = document.getElementById("confidence-interval").value;

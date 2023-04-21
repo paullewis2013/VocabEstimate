@@ -7,9 +7,11 @@ const path = require('path')
 const { ipcMain } = require('electron')
 
 var languageData = []
-var knownWords = []
-var unknownWords = []
+var knownWords = [[],[],[],[],[]]
+var unknownWords = [[],[],[],[],[]]
+var bracketSizes = []
 var sampleSize = 50
+var wordNum = 1
 
 // Listen for messages from the renderer process
 ipcMain.on('set-language', (event, message) => {
@@ -86,19 +88,25 @@ ipcMain.on('set-sample-size', (event, message) => {
 })
 ipcMain.on('known-word', (event, message) => {
     // console.log("known word: " + message)
-    if(!knownWords.includes(message) && !unknownWords.includes(message)){
-        knownWords.push(message)
+    let currentBracket = Math.floor((wordNum - 1)/(sampleSize/5))
+
+    if(!knownWords[currentBracket].includes(message) && !unknownWords[currentBracket].includes(message)){
+        knownWords[currentBracket].push(message)
     }else{
         console.log('duplicate word: ' + message)
     }
+    wordNum++;
 })
 ipcMain.on('unknown-word', (event, message) => {
     // console.log("unknown word: " + message)
-    if(!knownWords.includes(message) && !unknownWords.includes(message)){
-        unknownWords.push(message)
+    let currentBracket = Math.floor((wordNum - 1)/(sampleSize/5))
+
+    if(!knownWords[currentBracket].includes(message) && !unknownWords[currentBracket].includes(message)){
+        unknownWords[currentBracket].push(message)
     }else{
         console.log('duplicate word: ' + message)
     }
+    wordNum++;
 })
 ipcMain.on('reset', (event, message) => {
     knownWords = []
@@ -131,11 +139,12 @@ ipcMain.handle('get-words', (event, message) => {
 
         if (Math.floor(i % (sampleSize/brackets)) == Math.floor(sampleSize / brackets) - 1) {
             bracketStart += bracketSize
+            bracketSizes.push(bracketSize)
             bracketSize *= 2.5
         }
     }
 
-    // console.log(words)
+    // console.log(bracketSizes)
 
     // Send the word back to the renderer process
     return words
@@ -146,30 +155,70 @@ ipcMain.handle('get-result', (event, message) => {
     const z_95 = 1.96;
     const z_99 = 2.58;
 
-    var result = {
-        knownWords: knownWords.length,
-        unknownWords: unknownWords.length,
-        sampleMean: 0,
-        sampleStandardDeviation: 0,
-        sampleSize: knownWords.length + unknownWords.length,
-        variance: 0,
-        vocabEstimate: 0,
-        confidence90: 0,
-        confidence95: 0,
-        confidence99: 0
+    var sumKnown = 0
+    for(let i = 0; i < knownWords.length; i++){
+        sumKnown += knownWords[i].length
     }
 
-    result.vocabEstimate = Math.floor(1000 * (knownWords.length / (knownWords.length + unknownWords.length)))
-    result.sampleMean = result.knownWords / result.sampleSize
-    
-    sumSquaredDeviations = knownWords.length * Math.pow((1 - result.sampleMean), 2) + unknownWords.length * Math.pow((0 - result.sampleMean), 2)
-    
-    result.variance = sumSquaredDeviations / (result.sampleSize - 1)
-    result.sampleStandardDeviation = Math.sqrt(result.variance)
+    var sumUnknown = 0
+    for(let i = 0; i < unknownWords.length; i++){
+        sumUnknown += unknownWords[i].length
+    }
 
-    result.confidence90 = z_90 * result.sampleStandardDeviation / Math.sqrt(result.sampleSize)
-    result.confidence95 = z_95 * result.sampleStandardDeviation / Math.sqrt(result.sampleSize)
-    result.confidence99 = z_99 * result.sampleStandardDeviation / Math.sqrt(result.sampleSize)
+    var result = {
+        knownWords: knownWords,
+        unknownWords: unknownWords,
+        sumKnown: sumKnown,
+        sumUnknown: sumUnknown,
+        sampleMeans: [],
+        sampleStandardDeviations: [],
+        sampleSize: sampleSize - 0,
+        variances: [],
+        vocabEstimate: 0,
+        confidences90: [],
+        sum90: 0,
+        confidences95: [],
+        sum95: 0,
+        confidences99: [],
+        sum99: 0,
+    }
+    
+    for(let i = 0; i < knownWords.length; i++){
+        result.sampleMeans.push(knownWords[i].length / (knownWords[i].length + unknownWords[i].length))
+    }
+
+    result.vocabEstimate = 0
+    for(let i = 0; i < result.sampleMeans.length; i++){
+        result.vocabEstimate += result.sampleMeans[i] * bracketSizes[i]
+    }
+    
+    sumsSquaredDeviations = []
+    for(let i = 0; i < result.knownWords.length; i++){
+        sumsSquaredDeviations.push(knownWords[i].length * Math.pow((1 - result.sampleMeans[i]), 2) + unknownWords[i].length * Math.pow((0 - result.sampleMeans[i]), 2))
+    }
+
+    for(let i = 0; i < result.knownWords.length; i++){
+        result.variances.push(sumsSquaredDeviations[i] / (result.knownWords[i].length + result.unknownWords[i].length - 1))
+    }
+
+    for(let i = 0; i < result.knownWords.length; i++){
+        result.sampleStandardDeviations.push(Math.sqrt(result.variances[i]))
+    }
+    
+    for(let i = 0; i < result.knownWords.length; i++){
+        result.confidences90.push(z_90 * result.sampleStandardDeviations[i] / Math.sqrt(result.knownWords[i].length + result.unknownWords[i].length))
+        result.sum90 += result.confidences90[i] * bracketSizes[i]
+    }
+
+    for(let i = 0; i < result.knownWords.length; i++){
+        result.confidences95.push(z_95 * result.sampleStandardDeviations[i] / Math.sqrt(result.knownWords[i].length + result.unknownWords[i].length))
+        result.sum95 += result.confidences95[i] * bracketSizes[i]
+    }
+
+    for(let i = 0; i < result.knownWords.length; i++){
+        result.confidences99.push(z_99 * result.sampleStandardDeviations[i] / Math.sqrt(result.knownWords[i].length + result.unknownWords[i].length))
+        result.sum99 += result.confidences99[i] * bracketSizes[i]
+    }
 
     return result
 })
