@@ -9,6 +9,7 @@ const { ipcMain } = require('electron')
 var languageData = []
 var knownWords = [[],[],[],[],[]]
 var unknownWords = [[],[],[],[],[]]
+var brackets = 5
 var bracketSizes = []
 var sampleSize = 50
 var wordNum = 1
@@ -44,6 +45,7 @@ ipcMain.on('set-language', (event, message) => {
         var removeNumerals = true
         var removeCapitalFirstLetters = true // hopefully this will remove names
         var removeSpaces = true
+        var removeQuotes = true
 
         cleanedData = []
 
@@ -58,6 +60,13 @@ ipcMain.on('set-language', (event, message) => {
             if(removeNumerals){
                 if(/\d/.test(word)){
                     // console.log("ignoring " + word + " because it contains a numeral")
+                    continue;
+                }
+            }
+
+            if(removeQuotes){
+                if(word.includes('\'') || word.includes("\"")){
+                    // console.log("ignoring " + word + " because it contains a quote")
                     continue;
                 }
             }
@@ -88,7 +97,7 @@ ipcMain.on('set-sample-size', (event, message) => {
 })
 ipcMain.on('known-word', (event, message) => {
     // console.log("known word: " + message)
-    let currentBracket = Math.floor((wordNum - 1)/(sampleSize/5))
+    let currentBracket = Math.floor((wordNum - 1)/(sampleSize/brackets))
 
     if(!knownWords[currentBracket].includes(message) && !unknownWords[currentBracket].includes(message)){
         knownWords[currentBracket].push(message)
@@ -99,7 +108,7 @@ ipcMain.on('known-word', (event, message) => {
 })
 ipcMain.on('unknown-word', (event, message) => {
     // console.log("unknown word: " + message)
-    let currentBracket = Math.floor((wordNum - 1)/(sampleSize/5))
+    let currentBracket = Math.floor((wordNum - 1)/(sampleSize/brackets))
 
     if(!knownWords[currentBracket].includes(message) && !unknownWords[currentBracket].includes(message)){
         unknownWords[currentBracket].push(message)
@@ -109,15 +118,15 @@ ipcMain.on('unknown-word', (event, message) => {
     wordNum++;
 })
 ipcMain.on('reset', (event, message) => {
-    knownWords = []
-    unknownWords = []
+    knownWords = [[],[],[],[],[]]
+    unknownWords = [[],[],[],[],[]]
+    wordNum = 1
 })
 ipcMain.handle('get-words', (event, message) => {
 
     var words = []
     var word
 
-    var brackets = 5
     var bracketStart = 0
     var bracketSize = 500
 
@@ -173,6 +182,7 @@ ipcMain.handle('get-result', (event, message) => {
         sampleMeans: [],
         sampleStandardDeviations: [],
         sampleSize: sampleSize - 0,
+        bracketSizes: bracketSizes,
         variances: [],
         vocabEstimate: 0,
         confidences90: [],
