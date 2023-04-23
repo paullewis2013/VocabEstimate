@@ -65,7 +65,7 @@ ipcMain.on('set-language', (event, message) => {
             }
 
             if(removeQuotes){
-                if(word.includes('\'') || word.includes("\"")){
+                if(word.includes('\'') || word.includes("”")){
                     // console.log("ignoring " + word + " because it contains a quote")
                     continue;
                 }

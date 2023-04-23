@@ -50,11 +50,20 @@ function updateChart(){
     var ctx = document.getElementById('myChart').getContext('2d');
 
     let labels = []
-    let start = 0
+    let start = 1
     for(let i = 0; i < result.sampleMeans.length; i++){
-        labels.push(start + " - " + Math.floor(start + result.bracketSizes[i]))
+        labels.push("[" + start + " - " + Math.floor(start + result.bracketSizes[i] - 1) + "]")
         start += Math.floor(result.bracketSizes[i])
     }
+
+
+    // let errorBars = {}
+    // for(let i = 0; i < result.sampleMeans.length; i++){
+
+    //     errorBars.push({
+    //         "plus": result.confidenceInterval[i], "minus": result.confidenceInterval[i],
+    //     })
+    // }
 
     var distributionData = {
         labels: labels,
@@ -62,24 +71,33 @@ function updateChart(){
           label: 'Distribution',
           data: result.sampleMeans,
           borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
+          borderWidth: 1,
+        //   errorBars: errorBars,
         }]
       };
       
     var distributionOptions = {
         scales: {
             xAxes: [{
-            display: true,
-            scaleLabel: {
                 display: true,
-                labelString: 'Bracket'
-            }
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Bracket'
+                }
             }],
+            
             yAxes: [{
                 ticks: {
-                    beginAtZero: true
+                    min: 0,
+                    max: 1,
+                    callback: function(value) {
+                        return value * 100 + '%'; // Add the '%' symbol to the tick label
+                    }
                 },
-                labelString: 'Percentage recognized'
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Percentage Recognized'
+                }
             }]
         },
         responsive: true,
